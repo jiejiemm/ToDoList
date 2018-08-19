@@ -27,29 +27,42 @@ function displayCreateDate(creatDate){
 
 //点击各个rank-link里的a标签触发方法，将新增备忘录的菜单显示
 function display_addlist(idstr) {
-    addid=idstr.attr('id');
-    $("#"+addid).removeClass("hidden");
+    addid = idstr.attr('id');
+    //alert($("#" + addid).is(":visible"));
+    //if ($("#" + addid).is(":visible")) {
+    //    $(document).one("click", function () {
+    //        $("#" + addid).css('display', 'none');
+    //    });
+    //    $("#" + addid).on("click",function(e){
+    //            e.stopPropagation();
+    //        });
+    //    }
+
+    $("#"+addid).show();
+        //alert(document.getElementById(addid).style.display);
+    //}
 }
 
 $(function(){
+    $(".addlist").css('display','none');
     var storage=window.localStorage;
     var data=JSON.parse(storage.getItem("data"));
     for(var i in data){
         if(data[i]["planIndex"]==1){
             var $li=$("<li><span class='span_Text'>"+data[i]["planText"]+"</span><span class='span_Time'>"+data[i]["planTime"]+"</span></li>");
-            $("#ul-list-wrap-1 ul").append($li);
+            $("#ul-list-wrap-1 ul").prepend($li);
         }
         else if(data[i]["planIndex"]==2){
             var $li=$("<li><span class='span_Text'>"+data[i]["planText"]+"</span><span class='span_Time'>"+data[i]["planTime"]+"</span></li>");
-            $("#ul-list-wrap-2 ul").append($li);
+            $("#ul-list-wrap-2 ul").prepend($li);
         }
         else if(data[i]["planIndex"]==3){
             var $li=$("<li><span class='span_Text'>"+data[i]["planText"]+"</span><span class='span_Time'>"+data[i]["planTime"]+"</span></li>");
-            $("#ul-list-wrap-3 ul").append($li);
+            $("#ul-list-wrap-3 ul").prepend($li);
         }
         else if(data[i]["planIndex"]==4){
             var $li=$("<li><span class='span_Text'>"+data[i]["planText"]+"</span><span class='span_Time'>"+data[i]["planTime"]+"</span></li>");
-            $("#ul-list-wrap-4 ul").append($li);
+            $("#ul-list-wrap-4 ul").prepend($li);
         }
     }
     $(".left-menu .HeadPortrait").click(function(e){
@@ -93,42 +106,22 @@ $(function(){
     $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
 
 //点击页面其他地方，让当前显示的addlist的div隐藏
-
-        //$(document).one("click", function () {
-        //    alert("2");
-        //    //alert(!$(".addlist").hasClass("hidden"));
-        //    //alert($(".addlist").is(":visible"));
-        //    //if($(".addlist").is(":visible")){
-        //        if (!($(".addlist").hasClass("hidden"))==true) {
-        //            alert("3");
-        //            var disid=$(".addlist").attr('id');
-        //            alert(disid);
-        //            $("#"+disid).hide().addClass("hidden");
-        //            $("#"+disid).on("click", function (e) {
-        //                e.stopPropagation();
-        //            });
-        //        }
-        //    //}
-        //
-        //});
-
-
-    //if ($("#"+addid).is(":visible")) {
-    //    alert("333");
-    //    $(document).one("click", function () {
-    //        $("#"+addid).hide().addClass("hidden");
-    //    });
-    //    $("#" + idstr).on("click", function (e) {
-    //        e.stopPropagation();
-    //    });
-    //}
-
+//
+//    var arrlist=$(".addlist");
+//    for(var i=0;i<arrlist.length;i++){
+//        if(arrlist.is(":visible")){
+//            $(document).on("click",function(){     //如果可见就为documnet对象绑定个一次性的单击事件
+//                arrlist[i].style.display="none";
+//            });
+//        }
+//
+//    }
 
 //在输入框中输入内容后，按回车键，数据存到localstorage，box中新增一条备忘录记录
     $(".inp").keydown(function() {//给输入框绑定按键事件
         if(event.keyCode == "13") {//判断如果按下的是回车键则执行下面的代码
-            if($(".inp").val().trim().length==0){
-                alert("请输入内容！");
+            if($(".inp").val().length==0){
+                $(this).parent().parent().hide();
             }
             else{
                 if(!window.localStorage){
@@ -137,7 +130,6 @@ $(function(){
                 else{
                     var creatDate=new Date();
                     var id=$(this).parent().parent().attr('id');
-                    alert(id);
                     var index;
                     if(id=="addlist-1"){
                         index=1;
@@ -167,17 +159,18 @@ $(function(){
                     var $li=$("<li><span class='span_Text'>"+dataElement["planText"]+"</span><span class='span_Time'>"+dataElement["planTime"]+"</span></li>");
 
                     if(dataElement["planIndex"]==1){
-                        $("#ul-list-wrap-1 ul").append($li);
+                        $("#ul-list-wrap-1 ul").prepend($li);
                     }
                     else if(dataElement["planIndex"]==2){
-                        $("#ul-list-wrap-2 ul").append($li);
+                        $("#ul-list-wrap-2 ul").prepend($li);
                     }
                     else if(dataElement["planIndex"]==3){
-                        $("#ul-list-wrap-3 ul").append($li);
+                        $("#ul-list-wrap-3 ul").prepend($li);
                     }
                     else if(dataElement["planIndex"]==4){
-                        $("#ul-list-wrap-4 ul").append($li);
+                        $("#ul-list-wrap-4 ul").prepend($li);
                     }
+                    $(".inp").val("");
                 }
             }
 
