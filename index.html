@@ -138,16 +138,16 @@
         <!--备忘录四个盒子-->
         <div class="box">
             <div class="box-top-left" id="box-top-left">
-                <div class="rank-link">
-                    <a href="javascript:void(0);" onclick="display_addlist($('#addlist-1'))">
+                <div class="rank-link" id="rank-link1">
+                    <!--<a href="javascript:void(0);" onclick="display_addlist($('#addlist-1'))">-->
                         <span>很重要，很紧急</span>
                         <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
-                    </a>
+                    <!--</a>-->
                 </div>
-                <div  id="addlist-1" class="addlist">
+                <div  id="addlist-1" class="addlist hidden">
                     <div class="add-input">
-                        <input type="text" class="inp" placeholder="输入任务，按Enter键完成"/>
-                        <em></em>
+                        <input type="text" class="inp" id="inp1" placeholder="输入任务，按Enter键完成"/>
+                        <em class="enter"></em>
                     </div>
                         &nbsp;&nbsp;
                         <label for="start-date1">开始日期</label>&nbsp;
@@ -162,16 +162,14 @@
                 </div>
             </div>
             <div class="box-top-right">
-                <div class="rank-link">
-                    <a href="javascript:void(0);" onclick="display_addlist($('#addlist-2'))">
+                <div class="rank-link" id="rank-link2">
                         <span>重要，不紧急</span>
                         <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
-                    </a>
                 </div>
-                <div class="addlist" style="display: none" id="addlist-2">
+                <div class="addlist hidden" id="addlist-2">
                     <div class="add-input">
-                        <input type="text" class="inp" placeholder="输入任务，按Enter键完成"/>
-                        <em></em>
+                        <input type="text" class="inp" id="inp2" placeholder="输入任务，按Enter键完成"/>
+                        <em class="enter"></em>
                     </div>
                     &nbsp;&nbsp;
                     <label for="start-date2">开始日期</label>&nbsp;
@@ -186,16 +184,14 @@
                 </div>
             </div>
             <div class="box-bottom-left">
-                <div class="rank-link">
-                    <a href="javascript:void(0);" onclick="display_addlist($('#addlist-3'))">
+                <div class="rank-link" id="rank-link3">
                         <span>不重要，紧急</span>
                         <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
-                    </a>
                 </div>
-                <div class="addlist" style="display: none" id="addlist-3">
+                <div class="addlist hidden" id="addlist-3">
                     <div class="add-input">
-                        <input type="text" class="inp" placeholder="输入任务，按Enter键完成"/>
-                        <em></em>
+                        <input type="text" class="inp" id="inp3" placeholder="输入任务，按Enter键完成"/>
+                        <em class="enter"></em>
                     </div>
                     &nbsp;&nbsp;
                     <label for="start-date3">开始日期</label>&nbsp;
@@ -210,16 +206,14 @@
                 </div>
             </div>
             <div class="box-bottom-right">
-                <div class="rank-link">
-                    <a href="javascript:void(0);" onclick="display_addlist($('#addlist-4'))">
+                <div class="rank-link" id="rank-link4">
                         <span>不重要，不紧急</span>
                         <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
-                    </a>
                 </div>
-                <div class="addlist" style="display: none" id="addlist-4">
+                <div class="addlist  hidden" id="addlist-4">
                     <div class="add-input">
-                        <input type="text" class="inp" placeholder="输入任务，按Enter键完成"/>
-                        <em></em>
+                        <input type="text" class="inp" id="inp4" placeholder="输入任务，按Enter键完成"/>
+                        <em class="enter"></em>
                     </div>
                     &nbsp;&nbsp;
                     <label for="start-date4">开始日期</label>&nbsp;

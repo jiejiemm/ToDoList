@@ -1,7 +1,6 @@
 /**
  * Created by WX on 2018/8/9.
  */
-//显示隐藏工作空间
 function displayDate(nowDate){
     var year=nowDate.getFullYear();
     var month=nowDate.getMonth()+1;
@@ -25,26 +24,64 @@ function displayCreateDate(creatDate){
     return year+"-"+month+"-"+day+" "+hour+":"+minutes+":"+seconds;
 }
 
-//点击各个rank-link里的a标签触发方法，将新增备忘录的菜单显示
-function display_addlist(idstr) {
-    addid = idstr.attr('id');
-    //alert($("#" + addid).is(":visible"));
-    //if ($("#" + addid).is(":visible")) {
-    //    $(document).one("click", function () {
-    //        $("#" + addid).css('display', 'none');
-    //    });
-    //    $("#" + addid).on("click",function(e){
-    //            e.stopPropagation();
-    //        });
-    //    }
+function addToDoList(inpId){
+    var $inp=$("#"+inpId);
+    if($inp.val().trim().length==0){
+        alert("请输入内容！");
+    }
+    else{
+        if(!window.localStorage){
+            alert("浏览器不支持localstorage");
+        }
+        else{
+            var creatDate=new Date();
+            var id=$inp.parent().parent().attr('id');
+            var index;
+            if(id=="addlist-1"){
+                index=1;
+            }else if(id=="addlist-2"){
+                index=2;
+            }else if(id=="addlist-3"){
+                index=3;
+            }else if(id=="addlist-4"){
+                index=4;
+            }
+            $(this).parent().parent().hide();
+            var storage=window.localStorage;
+            var dataElement={
+                planText:$inp.val(),
+                planTime:displayCreateDate(creatDate),
+                planIndex:index
+            };//当前要新增的一条备忘录数据
+            if(storage.getItem("data") == null){
+                var data = [];
+            }
+            else{
+                var data = JSON.parse(storage.getItem("data"));
+            }//取出已存储的备忘录数据并转换为json数组，如当前还无任何备忘录数据，则新建一个json数组
+            data.push(dataElement);//将要新增的备忘录数据存入json数组
+            var d = JSON.stringify(data);//将json数组转为字符串，因为localStroage只存字符串
+            storage.setItem("data",d);
+            var $li=$("<li><span class='span_Text'>"+dataElement["planText"]+"</span><span class='span_Time'>"+dataElement["planTime"]+"</span></li>");
 
-    $("#"+addid).show();
-        //alert(document.getElementById(addid).style.display);
-    //}
+            if(dataElement["planIndex"]==1){
+                $("#ul-list-wrap-1 ul").prepend($li);
+            }
+            else if(dataElement["planIndex"]==2){
+                $("#ul-list-wrap-2 ul").prepend($li);
+            }
+            else if(dataElement["planIndex"]==3){
+                $("#ul-list-wrap-3 ul").prepend($li);
+            }
+            else if(dataElement["planIndex"]==4){
+                $("#ul-list-wrap-4 ul").prepend($li);
+            }
+            $inp.val("");
+        }
+    }
 }
 
 $(function(){
-    $(".addlist").css('display','none');
     var storage=window.localStorage;
     var data=JSON.parse(storage.getItem("data"));
     for(var i in data){
@@ -67,12 +104,13 @@ $(function(){
     }
     $(".left-menu .HeadPortrait").click(function(e){
         e.stopPropagation();
-        $(".workplace").toggle().removeClass("hidden");
-        if($(".workplace").is(":visible")){
+        var $wp=$(".workplace");
+        $wp.toggle().removeClass("hidden");
+        if($wp.is(":visible")){
             $(document).one("click",function(){
-                $(".workplace").hide();
+                $wp.hide();
             });
-            $(".workplace").on("click",function(e){
+            $wp.on("click",function(e){
                 e.stopPropagation();
             });
         }
@@ -105,77 +143,48 @@ $(function(){
 
     $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
 
-//点击页面其他地方，让当前显示的addlist的div隐藏
-//
-//    var arrlist=$(".addlist");
-//    for(var i=0;i<arrlist.length;i++){
-//        if(arrlist.is(":visible")){
-//            $(document).on("click",function(){     //如果可见就为documnet对象绑定个一次性的单击事件
-//                arrlist[i].style.display="none";
-//            });
-//        }
-//
-//    }
+//点击rank-link显示兄弟节点addlist，点击页面其他地方让当前显示的addlist的div隐藏
+    $(".rank-link").click(function(e){
+        e.stopPropagation();
+        var $next=$(this).next("div.addlist");
+        var $nextchild=$(this).next("div.addlist").children().children("em");
+        //alert($nextchild.attr('class'));
+        $($nextchild).click(function(){
+            var inpId=$(this).siblings("input").attr('id');
+            //alert(inpId);
+            addToDoList(inpId);
+            $(this).parent().parent().hide();
+        });
+        $("div.addlist").hide();
+        $next.toggle().removeClass("hidden");
 
-//在输入框中输入内容后，按回车键，数据存到localstorage，box中新增一条备忘录记录
-    $(".inp").keydown(function() {//给输入框绑定按键事件
-        if(event.keyCode == "13") {//判断如果按下的是回车键则执行下面的代码
-            if($(".inp").val().length==0){
-                $(this).parent().parent().hide();
-            }
-            else{
-                if(!window.localStorage){
-                    alert("浏览器不支持localstorage");
-                }
-                else{
-                    var creatDate=new Date();
-                    var id=$(this).parent().parent().attr('id');
-                    var index;
-                    if(id=="addlist-1"){
-                        index=1;
-                    }else if(id=="addlist-2"){
-                        index=2;
-                    }else if(id=="addlist-3"){
-                        index=3;
-                    }else if(id=="addlist-4"){
-                        index=4;
-                    }
-                    $(this).parent().parent().hide();
-                    var storage=window.localStorage;
-                    var dataElement={
-                        planText:$(".inp").val(),
-                        planTime:displayCreateDate(creatDate),
-                        planIndex:index
-                    };//当前要新增的一条备忘录数据
-                    if(storage.getItem("data") == null){
-                        var data = [];
-                    }
-                    else{
-                        var data = JSON.parse(storage.getItem("data"));
-                    }//取出已存储的备忘录数据并转换为json数组，如当前还无任何备忘录数据，则新建一个json数组
-                    data.push(dataElement);//将要新增的备忘录数据存入json数组
-                    var d = JSON.stringify(data);//将json数组转为字符串，因为localStroage只存字符串
-                    storage.setItem("data",d);
-                    var $li=$("<li><span class='span_Text'>"+dataElement["planText"]+"</span><span class='span_Time'>"+dataElement["planTime"]+"</span></li>");
-
-                    if(dataElement["planIndex"]==1){
-                        $("#ul-list-wrap-1 ul").prepend($li);
-                    }
-                    else if(dataElement["planIndex"]==2){
-                        $("#ul-list-wrap-2 ul").prepend($li);
-                    }
-                    else if(dataElement["planIndex"]==3){
-                        $("#ul-list-wrap-3 ul").prepend($li);
-                    }
-                    else if(dataElement["planIndex"]==4){
-                        $("#ul-list-wrap-4 ul").prepend($li);
-                    }
-                    $(".inp").val("");
-                }
-            }
-
+        if($next.is(":visible")){
+            $(document).click(function(e){
+                $next.hide();
+            });
+            $next.click(function(e){
+                e.stopPropagation();
+            });
         }
     });
+
+//在输入框中输入内容后，按回车键，数据存到localstorage，box中新增一条备忘录记录
+//    $(".inp").keydown(function() {//给输入框绑定按键事件
+
+        //if(event.keyCode == "13") {//判断如果按下的是回车键则执行下面的代码
+        //    var focusInput=$("input:focus");
+        //    alert(focusInput.attr('class'));
+        //}
+    //$(document).click(function(e){
+    //    alert("1");
+    //    $(e.target).attr('class');
+    //    //var tg=event.target();
+    //    //alert(tg.attr('class'));
+    //    //var inpId=$(this).prev().attr('id');
+    //    //alert(inpId);
+    //    //addToDoList(inpId);
+    //});
+    //});
 
 });
 
